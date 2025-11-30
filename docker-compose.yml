@@ -1,0 +1,40 @@
+services:
+  traffic-lab:
+    build: ./traffic-lab
+    container_name: traffic-lab
+    hostname: traffic-lab
+    restart: unless-stopped
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    volumes:
+      - ./traffic-lab/scripts:/usr/local/bin
+      - ./traffic-lab/datasets:/pcaps
+    networks:
+      iot_local:
+        ipv4_address: 172.28.10.10
+    command: ["tail", "-f", "/dev/null"]
+
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    hostname: gateway
+    restart: unless-stopped
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    volumes:
+      - ./gateway/detector:/opt/detector
+    networks:
+      iot_local:
+        ipv4_address: 172.28.10.20
+    command: ["tail", "-f", "/dev/null"]
+
+networks:
+  iot_local:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.28.10.0/24
+
