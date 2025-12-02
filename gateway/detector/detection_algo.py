@@ -49,20 +49,18 @@ MIN_TIME_BETWEEN_MITIGATIONS = 10.0  # seconds between congestion "events"
 
 # --- DDoS Detection Parameters (L4/L7) ---
 
-# SYN Flood (protocol attack)
-DDoS_SYN_RATIO_THRESHOLD = 0.30      # >30% of packets are SYN → suspect
-
-# Only bother checking SYN ratio once we have enough packets in the window
-DDoS_MIN_PACKETS_PER_WINDOW = 50
+# SYN Flood (protocol attack) – make it *very* sensitive
+DDoS_SYN_RATIO_THRESHOLD = 0.05      # 5% of packets are SYN
+DDoS_MIN_PACKETS_PER_WINDOW = 5      # only need 5 packets in a window
 
 # UDP Flood (volumetric)
-DDoS_UDP_RATE_THRESHOLD = 1000.0     # packets per second
+DDoS_UDP_RATE_THRESHOLD = 5.0        # >= 5 UDP packets per second
 
 # ICMP Flood (volumetric)
-DDoS_ICMP_RATE_THRESHOLD = 800.0     # packets per second
+DDoS_ICMP_RATE_THRESHOLD = 2.0       # >= 2 ICMP packets per second
 
 # HTTP Flood (application-layer)
-DDoS_HTTP_RATE_THRESHOLD = 50.0      # HTTP requests per second
+DDoS_HTTP_RATE_THRESHOLD = 1.0       # >= 1 HTTP request per second
 
 # “Mitigation” rates – here they are *virtual* (no tc called)
 DEFAULT_RATE_LIMIT_MBPS = 5.0  # congestion limit
