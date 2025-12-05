@@ -52,25 +52,6 @@ LEO link model and detection logic run **purely in userspace**.
         start_detector.sh
       Dockerfile
 
-## Dataset Requirement
-
-PCAP files from the **IoT-23 Dataset** cannot be stored in this GitHub
-repository due to size limits.
-
-### You must manually download the PCAP files from:
-
-📥 **https://www.stratosphereips.org/datasets-iot23**
-
-Then place the selected `.pcap` files into:
-
-    traffic-lab/datasets/iot_23_small/
-
-Example:
-
-    traffic-lab/datasets/iot_23_small/mirai-sample.pcap
-
-These files are required for traffic replay in the testbed.
-
 ------------------------------------------------------------------------
 
 ## Userspace LEO Link Model
@@ -120,6 +101,25 @@ Detects per-window flood patterns: - SYN Flood\
 ------------------------------------------------------------------------
 
 # Getting Started
+
+## Dataset Requirement
+
+PCAP files from the **IoT-23 Dataset** cannot be stored in this GitHub
+repository due to size limits.
+
+### You must manually download the PCAP files from:
+
+📥 **https://www.stratosphereips.org/datasets-iot23**
+
+Then place the selected `.pcap` files into:
+
+    traffic-lab/datasets/iot_23_small/
+
+Example:
+
+    traffic-lab/datasets/iot_23_small/mirai-sample.pcap
+
+These files are required for traffic replay in the testbed.
 
 ## 1. Build and Start Docker
 
