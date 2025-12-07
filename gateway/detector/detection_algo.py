@@ -8,9 +8,11 @@ This is adapted from the dynamic_leo_monitor_ddos.py design, but:
   - Uses a "virtual" rate limiter (no tc / qdisc, just logs actions)
   - Exposes an engine-style API instead of being a standalone script
   - Is driven by gateway_detector's sniffer and LEO link model
+  - Optionally writes per-window statistics to a CSV file for analysis
 
 Public API used by gateway_detector:
-  init_leo_engine(log_file, window_size: float = TIME_WINDOW_SECONDS) -> callable
+  init_leo_engine(log_file, window_size: float = TIME_WINDOW_SECONDS,
+                  csv_file: Optional[TextIO] = None) -> callable
       Returns a packet callback that accepts a Scapy Packet.
 
   shutdown_leo_engine() -> None
@@ -25,6 +27,7 @@ from __future__ import annotations
 import sys
 import time
 import threading
+import csv
 from typing import Dict, Any, Optional, Tuple, List, TextIO
 
 import numpy as np
@@ -387,6 +390,7 @@ class LEOLiveMonitorState:
         ddos_detector: DDoSDetection,
         window_size: float,
         log_file: Optional[TextIO],
+        csv_file: Optional[TextIO],
     ):
         self.monitor = monitor
         self.limiter = limiter
@@ -402,6 +406,40 @@ class LEOLiveMonitorState:
         self.thread = threading.Thread(target=self._polling_loop, daemon=True)
         self.is_ddos_active: bool = False
         self.log_file = log_file
+
+        # CSV logging setup
+        self.csv_file = csv_file
+        self.csv_writer: Optional[csv.writer] = None
+        if self.csv_file is not None:
+            self.csv_writer = csv.writer(self.csv_file)
+            # Header row for analysis
+            self.csv_writer.writerow([
+                "window",
+                "epoch_time",
+                "bytes_in_window",
+                "time_elapsed_s",
+                "rate_Bps",
+                "ewma_Bps",
+                "avg_rtt_ms",
+                "leo_state",
+                "leo_consecutive_anomalies",
+                "leo_threshold_multiplier",
+                "syn_ratio",
+                "udp_rate_pps",
+                "icmp_rate_pps",
+                "http_rate_rps",
+                "syn_suspected",
+                "udp_suspected",
+                "icmp_suspected",
+                "http_suspected",
+                "is_ddos_suspected",
+                "ddos_alert_type",
+                "congestion_alert",
+                "rate_limit_active",
+                "rate_limit_mbps",
+                "is_ddos_active",
+            ])
+            self.csv_file.flush()
 
     # ---- logging helper -------------------------------------------------
 
@@ -558,6 +596,46 @@ class LEOLiveMonitorState:
                     self.limiter.clear_limit()
                     self.monitor.leo_state = "normal"
 
+            # 4. CSV logging for this window
+            if self.csv_writer is not None:
+                try:
+                    syn_ratio_csv = ddos_results["syn_ratio"] if ddos_results["syn_ratio"] is not None else ""
+                    udp_rate_csv = ddos_results["udp_rate"] if ddos_results["udp_rate"] is not None else ""
+                    icmp_rate_csv = ddos_results["icmp_rate"] if ddos_results["icmp_rate"] is not None else ""
+                    http_rate_csv = ddos_results["http_rate"] if ddos_results["http_rate"] is not None else ""
+                    congestion_alert_flag = 1 if congestion_alert else 0
+
+                    self.csv_writer.writerow([
+                        self.window_count,
+                        current_time,
+                        bytes_in_window,
+                        time_elapsed,
+                        instantaneous_rate,
+                        new_ewma,
+                        avg_rtt,
+                        leo_status["state"],
+                        leo_status["consecutive_anomalies"],
+                        leo_status["current_multiplier"],
+                        syn_ratio_csv,
+                        udp_rate_csv,
+                        icmp_rate_csv,
+                        http_rate_csv,
+                        int(ddos_results["syn_suspected"]),
+                        int(ddos_results["udp_suspected"]),
+                        int(ddos_results["icmp_suspected"]),
+                        int(ddos_results["http_suspected"]),
+                        int(ddos_suspected),
+                        alert_type,
+                        congestion_alert_flag,
+                        int(self.limiter.limit_active),
+                        self.limiter.current_rate_mbps,
+                        int(self.is_ddos_active),
+                    ])
+                    if self.csv_file is not None:
+                        self.csv_file.flush()
+                except Exception as e:
+                    self._log(f"[ERROR] Failed to write CSV stats: {e}")
+
     def start(self) -> None:
         self.thread.start()
 
@@ -575,10 +653,19 @@ _ENGINE: Optional[LEOLiveMonitorState] = None
 _ENGINE_LOCK = threading.Lock()
 
 
-def init_leo_engine(log_file: Optional[TextIO], window_size: float = TIME_WINDOW_SECONDS):
+def init_leo_engine(
+    log_file: Optional[TextIO],
+    window_size: float = TIME_WINDOW_SECONDS,
+    csv_file: Optional[TextIO] = None,
+):
     """
     Initialize the LEO-aware monitoring engine and return a packet callback
     suitable for Scapy's sniff(prn=...) argument.
+
+    Args:
+        log_file: Text file object for human-readable log lines.
+        window_size: Aggregation window in seconds.
+        csv_file: Optional text file object for per-window CSV statistics.
     """
     global _ENGINE
 
@@ -620,6 +707,7 @@ def init_leo_engine(log_file: Optional[TextIO], window_size: float = TIME_WINDOW
             ddos_detector=ddos_detector,
             window_size=window_size,
             log_file=log_file,
+            csv_file=csv_file,
         )
         _ENGINE.start()
 

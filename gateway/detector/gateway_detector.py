@@ -9,6 +9,7 @@ This version:
   • applies a userspace LEO link model (delay + jitter + loss)
   • feeds packets into a LEO-aware EWMA + DDoS monitor (detection_algo.py)
   • logs window-level stats + alerts
+  • optionally writes per-window metrics to a CSV file
   • DOES NOT forward packets (no NFQUEUE / no tc)
 
 Architecture:
@@ -19,7 +20,8 @@ Architecture:
 To run inside the gateway container:
 
   python3 gateway_detector.py --iface eth0 \
-      --log-file /opt/detector/gateway_detector.log
+      --log-file /opt/detector/gateway_detector.log \
+      --csv-stats /opt/detector/window_stats.csv
 """
 
 import argparse
@@ -130,10 +132,20 @@ def main():
         default=1.0,
         help="Window size in seconds for EWMA/DDoS aggregation (default: 1.0s).",
     )
+    parser.add_argument(
+        "--csv-stats",
+        default=None,
+        help=(
+            "Optional path to a CSV file where per-window statistics will be written. "
+            "If omitted, no CSV stats are generated."
+        ),
+    )
     args = parser.parse_args()
 
     print(f"[INFO] Starting gateway_detector on iface={args.iface}")
     print(f"[INFO] Logging to {args.log_file}")
+    if args.csv_stats:
+        print(f"[INFO] Writing per-window statistics to CSV: {args.csv_stats}")
     if LEO_ENABLED:
         print(
             "[INFO] LEO link model enabled: "
@@ -143,24 +155,32 @@ def main():
     else:
         print("[INFO] LEO link model DISABLED")
 
-    # Open log file and initialize the LEO-aware engine
+    # Open log file and (optionally) CSV stats file, then initialize engine
     with open(args.log_file, "a", buffering=1) as log_file:
-        packet_cb = detection_algo.init_leo_engine(
-            log_file=log_file,
-            window_size=args.window_size,
-        )
-        handler = make_handler(packet_cb)
-
+        csv_file = None
         try:
-            sniff(
-                iface=args.iface,
-                store=False,
-                prn=handler,
+            if args.csv_stats:
+                # newline="" is important for correct CSV formatting on all platforms
+                csv_file = open(args.csv_stats, "w", newline="")
+            packet_cb = detection_algo.init_leo_engine(
+                log_file=log_file,
+                window_size=args.window_size,
+                csv_file=csv_file,
             )
-        except KeyboardInterrupt:
-            print("\n[INFO] KeyboardInterrupt received; stopping sniffer.")
+            handler = make_handler(packet_cb)
+
+            try:
+                sniff(
+                    iface=args.iface,
+                    store=False,
+                    prn=handler,
+                )
+            except KeyboardInterrupt:
+                print("\n[INFO] KeyboardInterrupt received; stopping sniffer.")
         finally:
             detection_algo.shutdown_leo_engine()
+            if csv_file is not None:
+                csv_file.close()
             print("[INFO] gateway_detector shutdown complete.")
 
 

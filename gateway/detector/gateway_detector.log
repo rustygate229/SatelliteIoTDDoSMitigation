@@ -399,3 +399,147 @@
 2025-12-02 03:51:44 Window 039 | Rate: 10180.44 Bps | EWMA:  7427.60 Bps | RTT:    7.7ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
 2025-12-02 03:51:45 Window 040 | Rate:     0.00 Bps | EWMA:  6684.84 Bps | RTT:    7.7ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
 2025-12-02 03:51:45 [LEO Monitor] Stopped.
+2025-12-02 21:21:59 [LEO Monitor] Polling started. Interval=1.0s
+2025-12-02 21:22:00 Window 001 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:01 Window 002 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:02 Window 003 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:03 Window 004 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:04 Window 005 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:05 Window 006 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:06 Window 007 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:07 Window 008 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:08 Window 009 | Rate:    69.99 Bps | EWMA:     7.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:09 Window 010 | Rate:     0.00 Bps | EWMA:     6.30 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:10 Window 011 | Rate:     0.00 Bps | EWMA:     5.67 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:11 Window 012 | Rate:     0.00 Bps | EWMA:     5.10 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:12 Window 013 | Rate:     0.00 Bps | EWMA:     4.59 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:13 Window 014 | Rate:     0.00 Bps | EWMA:     4.13 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:14 Window 015 | Rate:     0.00 Bps | EWMA:     3.72 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:15 Window 016 | Rate:  1301.68 Bps | EWMA:   133.52 Bps | RTT:    0.0ms | SYN:  5.9% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:15 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:22:15 [VIRTUAL MITIGATION] Set rate limit to 1.0 Mbps
+2025-12-02 21:22:16 Window 017 | Rate:  1858.19 Bps | EWMA:   305.98 Bps | RTT:    0.0ms | SYN: 18.2% | UDP:   7.0 pps | ICMP:   6.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:16 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:22:17 Window 018 | Rate:  1748.28 Bps | EWMA:   450.21 Bps | RTT:    0.0ms | SYN:  9.5% | UDP:  15.0 pps | ICMP:   1.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:22:17 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:22:18 Window 019 | Rate:  1797.45 Bps | EWMA:   584.94 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:22:18 [VIRTUAL MITIGATION] Clearing rate limit (back to normal).
+2025-12-02 21:22:19 Window 020 | Rate:  1641.22 Bps | EWMA:   690.57 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:20 Window 021 | Rate:  1737.25 Bps | EWMA:   795.23 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:21 Window 022 | Rate:  1804.98 Bps | EWMA:   896.21 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:22 Window 023 | Rate:  1651.34 Bps | EWMA:   971.72 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:23 Window 024 | Rate:  1501.29 Bps | EWMA:  1024.68 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:24 Window 025 | Rate:  1770.29 Bps | EWMA:  1099.24 Bps | RTT:    0.0ms | SYN:  4.5% | UDP:   7.0 pps | ICMP:   6.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:24 *** DDoS ALERT *** Suspected ICMP Flood.
+2025-12-02 21:22:24 [VIRTUAL MITIGATION] Set rate limit to 1.0 Mbps
+2025-12-02 21:22:25 Window 026 | Rate:  8750.92 Bps | EWMA:  1864.41 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   1.0 req/s | State:   normal
+2025-12-02 21:22:26 Window 027 | Rate: 10093.59 Bps | EWMA:  2687.33 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:26 [VIRTUAL MITIGATION] Clearing rate limit (back to normal).
+2025-12-02 21:22:27 Window 028 | Rate:  8688.45 Bps | EWMA:  3287.44 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:22:27 --> LEO CONGESTION! Rate=8688.45 Bps > UCL=5917.39 Bps for 3 windows.
+2025-12-02 21:22:27 [VIRTUAL MITIGATION] Set rate limit to 5.0 Mbps
+2025-12-02 21:22:28 Window 029 | Rate: 10089.12 Bps | EWMA:  3967.61 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:22:29 Window 030 | Rate:  7326.35 Bps | EWMA:  4303.48 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:30 Window 031 | Rate: 10033.07 Bps | EWMA:  4876.44 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:31 Window 032 | Rate:  7167.79 Bps | EWMA:  5105.57 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:32 Window 033 | Rate: 11639.10 Bps | EWMA:  5758.93 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:33 Window 034 | Rate:  8630.28 Bps | EWMA:  6046.06 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:34 Window 035 | Rate:  8653.64 Bps | EWMA:  6306.82 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:35 Window 036 | Rate: 11647.29 Bps | EWMA:  6840.87 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:36 Window 037 | Rate:  8543.77 Bps | EWMA:  7011.16 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:37 Window 038 | Rate:  8404.26 Bps | EWMA:  7150.47 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:38 Window 039 | Rate: 10016.95 Bps | EWMA:  7437.11 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:39 Window 040 | Rate:  4951.68 Bps | EWMA:  7188.57 Bps | RTT:    0.0ms | SYN:  9.1% | UDP:   1.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:39 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:22:39 [VIRTUAL MITIGATION] Set rate limit to 1.0 Mbps
+2025-12-02 21:22:40 Window 041 | Rate:  2001.49 Bps | EWMA:  6669.86 Bps | RTT:    0.0ms | SYN: 13.6% | UDP:  10.0 pps | ICMP:   6.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:40 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:22:41 Window 042 | Rate:  1814.28 Bps | EWMA:  6184.30 Bps | RTT:    0.0ms | SYN:  9.1% | UDP:  16.0 pps | ICMP:   2.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:41 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:22:42 Window 043 | Rate:  1850.13 Bps | EWMA:  5750.89 Bps | RTT:    0.0ms | SYN:  9.1% | UDP:  17.0 pps | ICMP:   1.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:42 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:22:43 Window 044 | Rate:  1735.91 Bps | EWMA:  5349.39 Bps | RTT:    0.0ms | SYN: 18.2% | UDP:  13.0 pps | ICMP:   1.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:43 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:22:44 Window 045 | Rate:  5800.32 Bps | EWMA:  5394.48 Bps | RTT:    0.0ms | SYN:  4.8% | UDP:   1.0 pps | ICMP:   0.0 pps | HTTP:   1.0 req/s | State: recovering
+2025-12-02 21:22:45 Window 046 | Rate: 10117.65 Bps | EWMA:  5866.80 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:22:45 [VIRTUAL MITIGATION] Clearing rate limit (back to normal).
+2025-12-02 21:22:46 Window 047 | Rate:  8489.86 Bps | EWMA:  6129.11 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:47 Window 048 | Rate: 10101.62 Bps | EWMA:  6526.36 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:48 Window 049 | Rate:  8829.20 Bps | EWMA:  6756.64 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:49 Window 050 | Rate:  8722.72 Bps | EWMA:  6953.25 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:50 Window 051 | Rate:  8721.62 Bps | EWMA:  7130.09 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:51 Window 052 | Rate:  8582.04 Bps | EWMA:  7275.28 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:52 Window 053 | Rate:   139.94 Bps | EWMA:  6561.75 Bps | RTT:    0.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:22:52 [LEO Monitor] Stopped.
+2025-12-02 21:24:06 [LEO Monitor] Polling started. Interval=1.0s
+2025-12-02 21:24:07 Window 001 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:08 Window 002 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:09 Window 003 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:10 Window 004 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:11 Window 005 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:12 Window 006 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:13 Window 007 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:14 Window 008 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:15 Window 009 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:16 Window 010 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:17 Window 011 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:18 Window 012 | Rate:     0.00 Bps | EWMA:     0.00 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:19 Window 013 | Rate:   189.93 Bps | EWMA:    18.99 Bps | RTT:  110.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:20 Window 014 | Rate:  1692.65 Bps | EWMA:   186.36 Bps | RTT:    0.0ms | SYN: 13.6% | UDP:   2.0 pps | ICMP:   1.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:20 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:24:20 [VIRTUAL MITIGATION] Set rate limit to 1.0 Mbps
+2025-12-02 21:24:21 Window 015 | Rate:  2018.15 Bps | EWMA:   369.54 Bps | RTT:    0.0ms | SYN: 13.0% | UDP:  11.0 pps | ICMP:   6.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:24:21 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:24:22 Window 016 | Rate:  1902.89 Bps | EWMA:   522.87 Bps | RTT:    0.0ms | SYN:  4.3% | UDP:  12.0 pps | ICMP:   1.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:24:22 *** DDoS ALERT *** Suspected UDP Flood.
+2025-12-02 21:24:23 Window 017 | Rate:  1711.51 Bps | EWMA:   641.74 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:24:23 [VIRTUAL MITIGATION] Clearing rate limit (back to normal).
+2025-12-02 21:24:24 Window 018 | Rate:  1573.78 Bps | EWMA:   734.94 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:25 Window 019 | Rate:  1640.96 Bps | EWMA:   825.54 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:26 Window 020 | Rate:  1681.20 Bps | EWMA:   911.11 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:27 Window 021 | Rate:  1585.51 Bps | EWMA:   978.55 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:28 Window 022 | Rate:  1806.62 Bps | EWMA:  1061.36 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   2.0 pps | ICMP:   2.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:29 Window 023 | Rate:  4605.25 Bps | EWMA:  1415.74 Bps | RTT:    0.0ms | SYN:  9.1% | UDP:   5.0 pps | ICMP:   3.0 pps | HTTP:   1.0 req/s | State:   normal
+2025-12-02 21:24:29 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:24:29 [VIRTUAL MITIGATION] Set rate limit to 1.0 Mbps
+2025-12-02 21:24:30 Window 024 | Rate: 10023.32 Bps | EWMA:  2276.50 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:30 [VIRTUAL MITIGATION] Clearing rate limit (back to normal).
+2025-12-02 21:24:31 Window 025 | Rate: 10039.06 Bps | EWMA:  3052.76 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:24:31 --> LEO CONGESTION! Rate=10039.06 Bps > UCL=5494.96 Bps for 3 windows.
+2025-12-02 21:24:31 [VIRTUAL MITIGATION] Set rate limit to 5.0 Mbps
+2025-12-02 21:24:32 Window 026 | Rate:  7206.19 Bps | EWMA:  3468.10 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:24:33 Window 027 | Rate: 10088.10 Bps | EWMA:  4130.10 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:24:34 Window 028 | Rate: 10093.61 Bps | EWMA:  4726.45 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: congested
+2025-12-02 21:24:35 Window 029 | Rate:  8706.90 Bps | EWMA:  5124.50 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:36 Window 030 | Rate: 10159.10 Bps | EWMA:  5627.96 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:37 Window 031 | Rate:  8717.27 Bps | EWMA:  5936.89 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:38 Window 032 | Rate: 10144.77 Bps | EWMA:  6357.68 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:39 Window 033 | Rate:  7154.04 Bps | EWMA:  6437.31 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:40 Window 034 | Rate: 10004.04 Bps | EWMA:  6793.99 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:41 Window 035 | Rate: 10002.02 Bps | EWMA:  7114.79 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:42 Window 036 | Rate:  8537.59 Bps | EWMA:  7257.07 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:43 Window 037 | Rate: 10004.63 Bps | EWMA:  7531.83 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:44 Window 038 | Rate:  2248.78 Bps | EWMA:  7003.52 Bps | RTT:    0.0ms | SYN: 19.0% | UDP:   3.0 pps | ICMP:   3.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:44 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:24:44 [VIRTUAL MITIGATION] Set rate limit to 1.0 Mbps
+2025-12-02 21:24:45 Window 039 | Rate:  1859.82 Bps | EWMA:  6489.15 Bps | RTT:    0.0ms | SYN:  4.8% | UDP:  13.0 pps | ICMP:   4.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:45 *** DDoS ALERT *** Suspected ICMP Flood.
+2025-12-02 21:24:46 Window 040 | Rate:  2091.94 Bps | EWMA:  6049.43 Bps | RTT:    0.0ms | SYN:  4.2% | UDP:  20.0 pps | ICMP:   2.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:46 *** DDoS ALERT *** Suspected UDP Flood.
+2025-12-02 21:24:47 Window 041 | Rate:  1735.94 Bps | EWMA:  5618.08 Bps | RTT:    0.0ms | SYN: 18.2% | UDP:  13.0 pps | ICMP:   1.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:47 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:24:48 Window 042 | Rate:  1891.21 Bps | EWMA:  5245.39 Bps | RTT:    0.0ms | SYN: 13.0% | UDP:  11.0 pps | ICMP:   1.0 pps | HTTP:   1.0 req/s | State: recovering
+2025-12-02 21:24:48 *** DDoS ALERT *** Suspected SYN Flood.
+2025-12-02 21:24:49 Window 043 | Rate: 10089.63 Bps | EWMA:  5729.82 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State: recovering
+2025-12-02 21:24:49 [VIRTUAL MITIGATION] Clearing rate limit (back to normal).
+2025-12-02 21:24:50 Window 044 | Rate:  8537.05 Bps | EWMA:  6010.54 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:51 Window 045 | Rate: 10094.89 Bps | EWMA:  6418.98 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:52 Window 046 | Rate: 10041.97 Bps | EWMA:  6781.28 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:53 Window 047 | Rate:  8624.67 Bps | EWMA:  6965.61 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:54 Window 048 | Rate: 10145.42 Bps | EWMA:  7283.60 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:55 Window 049 | Rate:  9987.25 Bps | EWMA:  7553.96 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:56 Window 050 | Rate:  8666.88 Bps | EWMA:  7665.25 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:57 Window 051 | Rate:  8591.10 Bps | EWMA:  7757.84 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:58 Window 052 | Rate: 10011.03 Bps | EWMA:  7983.16 Bps | RTT:    0.0ms | SYN:  0.0% | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:59 Window 053 | Rate:     0.00 Bps | EWMA:  7184.84 Bps | RTT:    0.0ms | SYN:  N/A | UDP:   0.0 pps | ICMP:   0.0 pps | HTTP:   0.0 req/s | State:   normal
+2025-12-02 21:24:59 [LEO Monitor] Stopped.
