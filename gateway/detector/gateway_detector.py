@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
 """
-gateway_detector.py
------------------------------------------
-Sniffer-based packet detector for the IoT gateway.
+Sniffer-based packet detector for the IoT gateway
 
 This version:
-  • sniffs packets from the IoT subnet
-  • applies a userspace LEO link model (delay + jitter + loss)
-  • feeds packets into a LEO-aware EWMA + DDoS monitor (detection_algo.py)
-  • logs window-level stats + alerts
-  • DOES NOT forward packets (no NFQUEUE / no tc)
+  - sniffs packets from the IoT subnet
+  - applies a LEO link model (delay, jitter, loss)
+  - feeds packets into a LEO-aware EWMA and DDoS monitor (detection_algo.py)
+  - logs window-level stats and alerts
+  - DOES NOT forward packets since no NFQUEUE or tc
 
 Architecture:
   traffic-lab (PCAP replay)
-      → (simulated LEO link in this process)
-          → gateway_detector (LEO-aware detection + logging)
+     - simulated LEO link in this process
+         - gateway_detector (LEO-aware detection + logging)
 
 To run inside the gateway container:
 
@@ -30,25 +28,19 @@ from scapy.all import sniff
 
 import detection_algo
 
-
-# ---------------------------------------------------------------------------
-# LEO satellite link model (userspace simulation)
-# ---------------------------------------------------------------------------
-
 LEO_ENABLED = True
 
 # One-way base delay (seconds)
-LEO_DELAY = 0.045  # 45 ms
+LEO_DELAY = 0.045
 
-# Jitter (seconds): actual delay uniformly in [DELAY - JITTER, DELAY + JITTER]
-LEO_JITTER = 0.015  # ±15 ms
+# Jitter (seconds) actual delay uniformly in range [delay - jitter, delay + jitter] (+-15)
+LEO_JITTER = 0.015
 
-# Independent per-packet loss probability
+# Independent per packet loss probability
 LEO_LOSS_PROB = 0.05
 
-
+# Model of a LEO satellite link with delay, jitter and loss
 class LEOLink:
-    """Simple userspace model of a LEO satellite link (delay + jitter + loss)."""
 
     def __init__(self, delay: float, jitter: float, loss_prob: float, enabled: bool = True):
         self.delay = delay
@@ -57,21 +49,16 @@ class LEOLink:
         self.enabled = enabled
 
     def apply(self) -> bool:
-        """
-        Apply the link model to a single packet.
-
-        Returns:
-            True  → packet passes through the link (after delay)
-            False → packet is dropped by the link
-        """
-        if not self.enabled:
+        # Applies link model to a single packet
+        
+		if not self.enabled:
             return True
 
-        # Random loss
+        # Randomized loss
         if random.random() < self.loss_prob:
             return False
 
-        # Delay + jitter
+        # Delay and jitter
         if self.delay > 0 or self.jitter > 0:
             low = self.delay - self.jitter
             high = self.delay + self.jitter
@@ -83,7 +70,7 @@ class LEOLink:
         return True
 
 
-# Single global instance used by all packets
+# Global instance used by all packets
 LEO_LINK = LEOLink(
     delay=LEO_DELAY,
     jitter=LEO_JITTER,
@@ -92,17 +79,8 @@ LEO_LINK = LEOLink(
 )
 
 
-# ---------------------------------------------------------------------------
-# Sniffer handler wiring
-# ---------------------------------------------------------------------------
-
+# Wraps detection algorithm into LEO link model
 def make_handler(packet_callback):
-    """
-    Wrap the detection_algo packet_callback with the LEO link model.
-
-    The order is:
-      replay_pcap → sniffed by gateway → LEO_LINK.apply() → packet_callback(pkt)
-    """
     def handler(pkt):
         # Apply LEO link behavior before the detection engine "sees" the packet.
         if not LEO_LINK.apply():
@@ -143,7 +121,7 @@ def main():
     else:
         print("[INFO] LEO link model DISABLED")
 
-    # Open log file and initialize the LEO-aware engine
+    # Open log file and initialize engine
     with open(args.log_file, "a", buffering=1) as log_file:
         packet_cb = detection_algo.init_leo_engine(
             log_file=log_file,
@@ -166,4 +144,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
