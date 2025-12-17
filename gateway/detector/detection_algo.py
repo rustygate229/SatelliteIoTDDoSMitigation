@@ -1,23 +1,20 @@
 #!/usr/bin/env python3
 """
-detection_algo.py
------------------------------------------
 LEO-aware congestion + DDoS detector used by gateway_detector.py.
 
-This is adapted from the dynamic_leo_monitor_ddos.py design, but:
-  - Uses a "virtual" rate limiter (no tc / qdisc, just logs actions)
-  - Exposes an engine-style API instead of being a standalone script
+Adapted from an older design, but with:
+  - Uses a "virtual" rate limiter (no tc, just logs actions)
+  - Exposes an engine-style API
   - Is driven by gateway_detector's sniffer and LEO link model
 
-Public API used by gateway_detector:
-  init_leo_engine(log_file, window_size: float = TIME_WINDOW_SECONDS) -> callable
+API used by gateway_detector:
+  init_leo_engine(log_file, window_size: float = TIME_WINDOW_SECONDS)
       Returns a packet callback that accepts a Scapy Packet.
 
-  shutdown_leo_engine() -> None
+  shutdown_leo_engine()
       Stops the background polling thread cleanly.
-
-The old analyze(flow) API is kept as a stub for compatibility, but
-the real LEO-aware logic is in LEOLiveMonitorState.
+      
+LEO-aware logic is in LEOLiveMonitorState.
 """
 
 from __future__ import annotations
@@ -30,54 +27,48 @@ from typing import Dict, Any, Optional, Tuple, List, TextIO
 import numpy as np
 from scapy.all import Packet, IP, TCP, UDP, ICMP
 
-# ---------------------------------------------------------------------------
-# 1. Configuration Constants (LEO-aware)
-# ---------------------------------------------------------------------------
+# Configuration Constants (LEO-aware)
 
-# LEO Satellite Characteristics (used for baseline)
-LEO_BASE_LATENCY_MS = 45  # 45 ms one-way
-LEO_TYPICAL_RTT_MS = (LEO_BASE_LATENCY_MS * 2) + 20  # ~110 ms RTT estimate
+# LEO Satellite Characteristics (used as baseline)
+LEO_BASE_LATENCY_MS = 45
+LEO_TYPICAL_RTT_MS = (LEO_BASE_LATENCY_MS * 2) + 20  # 110 ms RTT estimate
 
 # EWMA Parameters (tuned for LEO)
-EWMA_ALPHA = 0.1            # Slower smoothing for intermittent LEO links
+EWMA_ALPHA = 0.1            # Slower smoothing for intermittent links
 THRESHOLD_MULTIPLIER = 1.8  # Higher threshold for burst tolerance
-TIME_WINDOW_SECONDS = 1.0   # 1-second windows
+TIME_WINDOW_SECONDS = 1.0
 
-# Mitigation / anomaly behavior
-CONSECUTIVE_ANOMALIES_REQUIRED = 3   # sustained violations
-MIN_TIME_BETWEEN_MITIGATIONS = 10.0  # seconds between congestion "events"
+# Mitigation / Anomaly behavior
+CONSECUTIVE_ANOMALIES_REQUIRED = 3   # Anomalies required for triggering
+MIN_TIME_BETWEEN_MITIGATIONS = 10.0  # Seconds between congestion events
 
-# --- DDoS Detection Parameters (L4/L7) ---
+# DDoS Detection Parameters (tuned for IoT-23 Pcaps)
 
-# SYN Flood (protocol attack) – make it *very* sensitive
-DDoS_SYN_RATIO_THRESHOLD = 0.05      # 5% of packets are SYN
-DDoS_MIN_PACKETS_PER_WINDOW = 5      # only need 5 packets in a window
+# SYN Flood (protocol attack) – makes it very sensitive
+DDoS_SYN_RATIO_THRESHOLD = 0.05
+DDoS_MIN_PACKETS_PER_WINDOW = 5
 
 # UDP Flood (volumetric)
-DDoS_UDP_RATE_THRESHOLD = 5.0        # >= 5 UDP packets per second
+DDoS_UDP_RATE_THRESHOLD = 5.0
 
 # ICMP Flood (volumetric)
-DDoS_ICMP_RATE_THRESHOLD = 2.0       # >= 2 ICMP packets per second
+DDoS_ICMP_RATE_THRESHOLD = 2.0
 
-# HTTP Flood (application-layer)
-DDoS_HTTP_RATE_THRESHOLD = 1.0       # >= 1 HTTP request per second
+# HTTP Flood (application layer)
+DDoS_HTTP_RATE_THRESHOLD = 1.0
 
-# “Mitigation” rates – here they are *virtual* (no tc called)
+# Mitigation rates – here they are virtual (no tc called)
 DEFAULT_RATE_LIMIT_MBPS = 5.0  # congestion limit
 DDoS_RATE_LIMIT_MBPS = 1.0     # aggressive DDoS limit
 
 
-# ---------------------------------------------------------------------------
-# 2. Virtual Rate Limiter (no tc, no subprocess)
-# ---------------------------------------------------------------------------
-
+# Virtual Rate Limiter (no tc)
 class VirtualRateLimiter:
-    """
-    A tc-free stand-in for TCRateLimiter.
 
-    It keeps track of an imaginary rate limit and logs when that limit would
-    be applied or cleared. This preserves the structure of the original LEO
-    algorithm without requiring tc/netem in the container.
+    """
+    tc free substitution for original tc RateLimiter.
+
+    Keeps track of rate limit and logs when that limit would be applied or cleared. Avoids requiring tc/netem for gateway
     """
 
     def __init__(self, log: callable):
@@ -100,12 +91,8 @@ class VirtualRateLimiter:
         self.current_rate_mbps = 0.0
 
 
-# ---------------------------------------------------------------------------
-# 3. LEO-Aware EWMA Monitor (Congestion Detection)
-# ---------------------------------------------------------------------------
-
+# LEO-Aware EWMA Monitor (Congestion Detection)
 class LEO_EWMA_Monitor:
-    """EWMA monitor with LEO-specific tolerance and RTT-based dynamic thresholds."""
 
     def __init__(self, alpha: float, threshold_multiplier: float, typical_rtt_ms: float):
         self.alpha = alpha
@@ -124,7 +111,7 @@ class LEO_EWMA_Monitor:
         self.max_rtt_samples: int = 100
 
     def update(self, new_value: float, current_time: float) -> Tuple[float, Optional[str]]:
-        """Updates EWMA and checks for anomalies with LEO-aware tolerance."""
+        # Updates EWMA and checks for anomalies
         if self.ewma < 0:
             self.ewma = new_value
             return self.ewma, None
@@ -134,10 +121,10 @@ class LEO_EWMA_Monitor:
         return self.ewma, alert_message
 
     def _check_leo_anomaly(self, instantaneous_rate: float, current_time: float) -> Optional[str]:
-        """LEO-aware check for sustained congestion using EWMA + burst allowance."""
+        # Check for sustained congestion (EWMA and burst allowance)
         upper_control_limit = self.ewma * self.threshold_multiplier
 
-        # Allow a small number of benign bursts (LEO links can be spiky)
+        # Allow a small number of benign bursts since LEO links can be volatile
         if self.burst_allowance > 0 and instantaneous_rate < (upper_control_limit * 1.5):
             self.burst_allowance -= 1
             return None
@@ -159,32 +146,30 @@ class LEO_EWMA_Monitor:
                     f"{self.consecutive_anomalies} windows."
                 )
         else:
-            # Recovery tracking
+            # Recovering anomalies logic
             if self.consecutive_anomalies > 0:
                 self.consecutive_anomalies = 0
                 if self.leo_state == "congested":
                     self.leo_state = "recovering"
-                    self.burst_allowance = 5  # allow bursts again during recovery
+                    self.burst_allowance = 5
 
         return None
 
     def update_rtt_estimate(self, rtt_ms: float) -> None:
-        """Update RTT estimates and adjust threshold tolerance dynamically."""
         self.rtt_estimates.append(rtt_ms)
         if len(self.rtt_estimates) > self.max_rtt_samples:
             self.rtt_estimates.pop(0)
 
         avg_rtt = np.mean(self.rtt_estimates) if self.rtt_estimates else self.typical_rtt_ms
 
-        # If RTT blows up relative to nominal LEO RTT, tighten threshold
+        # If RTT goes above relative to nominal LEO RTT threshold is tightened
         if avg_rtt > self.typical_rtt_ms * 1.5:
             self.threshold_multiplier = max(1.5, self.threshold_multiplier * 0.95)
-        # If RTT recovers back toward baseline, relax threshold
+        # If RTT recovers back toward baseline threshold is relaxed
         elif avg_rtt < self.typical_rtt_ms * 1.1 and self.threshold_multiplier < self.threshold_multiplier_base:
             self.threshold_multiplier = min(self.threshold_multiplier_base, self.threshold_multiplier * 1.02)
 
     def get_leo_status(self) -> Dict[str, Any]:
-        """Returns LEO-specific status information."""
         avg_rtt = np.mean(self.rtt_estimates) if self.rtt_estimates else self.typical_rtt_ms
         return {
             "state": self.leo_state,
@@ -194,14 +179,8 @@ class LEO_EWMA_Monitor:
         }
 
 
-# ---------------------------------------------------------------------------
-# 4. DDoS Detection Module (UDP, ICMP, SYN, HTTP)
-# ---------------------------------------------------------------------------
-
+# DDoS Detection Module (UDP, ICMP, SYN, HTTP)
 class DDoSDetection:
-    """
-    Comprehensive module for detecting UDP, ICMP, SYN Flood, and HTTP Flood attacks.
-    """
 
     def __init__(
         self,
@@ -217,7 +196,7 @@ class DDoSDetection:
         self.icmp_rate_threshold = icmp_rate_threshold
         self.http_rate_threshold = http_rate_threshold
 
-        # Counters for current window
+        # Counts for current window
         self.syn_count: int = 0
         self.udp_count: int = 0
         self.icmp_count: int = 0
@@ -227,7 +206,7 @@ class DDoSDetection:
         self.lock = threading.Lock()
 
     def process_packet(self, packet: Packet) -> None:
-        """Processes a packet to count all relevant DDoS indicators."""
+        # Processes a packet, counting DDoS indicators
         with self.lock:
             self.total_packets += 1
 
@@ -244,26 +223,23 @@ class DDoSDetection:
                 self.udp_count += 1
                 return
 
-            # SYN + HTTP Flood (TCP L4/L7)
+            # SYN + HTTP Flood (TCP L4/5)
             if packet.haslayer(TCP):
                 tcp = packet[TCP]
 
-                # SYN set, ACK not set → connection attempt
                 if tcp.flags & 0x02 and not (tcp.flags & 0x10):
                     self.syn_count += 1
 
-                # Lightweight HTTP request detection on ports 80/443
                 if (tcp.dport in (80, 443) or tcp.sport in (80, 443)) and packet.haslayer("Raw"):
                     try:
                         payload = packet["Raw"].load.upper()
                         if payload.startswith(b"GET ") or payload.startswith(b"POST ") or payload.startswith(b"HEAD "):
                             self.http_request_count += 1
                     except Exception:
-                        # Ignore malformed payloads
                         pass
 
     def check_status(self, time_elapsed: float) -> Dict[str, Any]:
-        """Compute rates/ratios for this window and decide if DDoS is suspected."""
+        # Computes rates and ratios for window and decide if DDoS is suspected
         with self.lock:
             results: Dict[str, Any] = {
                 "is_ddos_suspected": False,
@@ -310,7 +286,7 @@ class DDoSDetection:
                 results["http_suspected"] = True
                 results["alert_type"] = "HTTP Flood"
 
-            # Overall DDoS suspicion
+            # Overall DDoS suspected
             results["is_ddos_suspected"] = (
                 results["udp_suspected"]
                 or results["icmp_suspected"]
@@ -321,7 +297,6 @@ class DDoSDetection:
             return results
 
     def reset_window(self) -> None:
-        """Reset counters for next time window."""
         with self.lock:
             self.syn_count = 0
             self.udp_count = 0
@@ -330,21 +305,17 @@ class DDoSDetection:
             self.total_packets = 0
 
 
-# ---------------------------------------------------------------------------
-# 5. RTT Monitor (SYN/SYN-ACK based)
-# ---------------------------------------------------------------------------
-
+# RTT Monitor (SYN-ACK based)
 class RTTMonitor:
-    """Basic RTT monitoring using TCP packet analysis (SYN/SYN-ACK)."""
 
     def __init__(self):
-        # key: (src, dst, sport, dport) → SYN timestamp
+        # src, dst, sport, and dport goes to SYN timestamp
         self.tcp_sessions: Dict[Tuple[str, str, int, int], float] = {}
         self.rtt_samples: List[float] = []
         self.max_rtt_samples: int = 100
 
     def process_packet(self, packet: Packet) -> Optional[float]:
-        """Process TCP packets and return RTT (ms) when a SYN/SYN-ACK pair completes."""
+        # Process TCP packets and return RTT when SYN check completes
         if not (packet.haslayer(IP) and packet.haslayer(TCP)):
             return None
 
@@ -373,12 +344,8 @@ class RTTMonitor:
         return None
 
 
-# ---------------------------------------------------------------------------
-# 6. LEO Live Monitor State (background polling)
-# ---------------------------------------------------------------------------
-
+# LEO Live Monitor State (background polling)
 class LEOLiveMonitorState:
-    """LEO-aware live monitor integrating EWMA, RTT, and DDoS detection."""
 
     def __init__(
         self,
@@ -403,43 +370,43 @@ class LEOLiveMonitorState:
         self.is_ddos_active: bool = False
         self.log_file = log_file
 
-    # ---- logging helper -------------------------------------------------
+    # Logging Helper
 
     def _log(self, msg: str) -> None:
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
         line = f"{timestamp} {msg}"
-        # Log file (if provided)
+        # Log File (if provided)
         if self.log_file is not None:
             try:
                 self.log_file.write(line + "\n")
             except Exception:
                 pass
-        # Also mirror to stdout for docker logs
+        # Also mirrors to stdout for docker logs
         print(line)
 
-    # ---- external API called by sniffer --------------------------------
+    # External API called by sniffer
 
     def packet_callback(self, packet: Packet) -> None:
-        """Feeds packets to RTT, DDoS, and EWMA modules."""
+        # Feeds packets to RTT, DDoS, and EWMA modules
         try:
             packet_size = len(packet)
 
-            # 1. RTT monitoring (TCP only)
+            # RTT monitoring (TCP only)
             rtt_ms = self.rtt_monitor.process_packet(packet)
             if rtt_ms is not None:
                 self.monitor.update_rtt_estimate(rtt_ms)
 
-            # 2. DDoS counters
+            # DDoS counters
             self.ddos_detector.process_packet(packet)
 
-            # 3. EWMA byte counter for this window
+            # EWMA byte counter for this window
             with self.lock:
                 self.current_window_bytes += packet_size
 
         except Exception as e:
             self._log(f"[ERROR] Packet processing failed: {e}")
 
-    # ---- background polling loop ---------------------------------------
+    # Background Polling Loop
 
     def _polling_loop(self) -> None:
         self._log(f"[LEO Monitor] Polling started. Interval={self.window_size:.1f}s")
@@ -460,19 +427,19 @@ class LEOLiveMonitorState:
             current_time = time.time()
             self.window_count += 1
 
-            # 1. DDoS status for this window
+            # DDoS status for this window
             ddos_results = self.ddos_detector.check_status(time_elapsed)
             self.ddos_detector.reset_window()
 
             ddos_suspected = ddos_results["is_ddos_suspected"]
             alert_type = ddos_results["alert_type"]
 
-            # 2. EWMA congestion status
+            # EWMA congestion status
             new_ewma, congestion_alert = self.monitor.update(instantaneous_rate, current_time)
             leo_status = self.monitor.get_leo_status()
             avg_rtt = leo_status["avg_rtt_ms"]
 
-            # Pretty-print metrics
+            # Print out metrics
             syn_out = (
                 f"{ddos_results['syn_ratio'] * 100:4.1f}%"
                 if ddos_results["syn_ratio"] is not None
@@ -510,7 +477,7 @@ class LEOLiveMonitorState:
                 )
             )
 
-            # 3. “Mitigation” (virtual) decisions
+            # Mitigation (Virtual) decisions
 
             if ddos_suspected:
                 # DDoS wins over congestion
@@ -525,7 +492,7 @@ class LEOLiveMonitorState:
                 self.limiter.apply_limit(DEFAULT_RATE_LIMIT_MBPS)
 
             elif self.limiter.limit_active:
-                # Clear virtual limit once everything looks safe again
+                # Clear virtual limit once everything looks safe
 
                 syn_safe = (
                     ddos_results["syn_ratio"] is None
@@ -567,19 +534,15 @@ class LEOLiveMonitorState:
         self._log("[LEO Monitor] Stopped.")
 
 
-# ---------------------------------------------------------------------------
-# 7. Engine-style API used by gateway_detector
-# ---------------------------------------------------------------------------
+# Engine-style API used by gateway_detector
 
 _ENGINE: Optional[LEOLiveMonitorState] = None
 _ENGINE_LOCK = threading.Lock()
 
 
 def init_leo_engine(log_file: Optional[TextIO], window_size: float = TIME_WINDOW_SECONDS):
-    """
-    Initialize the LEO-aware monitoring engine and return a packet callback
-    suitable for Scapy's sniff(prn=...) argument.
-    """
+    # Initialize the LEO-aware monitoring engine and return a packet callback
+    # Can be used for for Scapy's sniff(prn=...) argument
     global _ENGINE
 
     with _ENGINE_LOCK:
@@ -592,8 +555,7 @@ def init_leo_engine(log_file: Optional[TextIO], window_size: float = TIME_WINDOW
             typical_rtt_ms=LEO_TYPICAL_RTT_MS,
         )
 
-        # Virtual rate limiter that logs actions
-        # Logging function will be stitched in after we know log_file.
+        # Virtual rate limiter that logs actions and logging function will be stitched in after knowing log_file
         def _limiter_log(msg: str):
             ts = time.strftime("%Y-%m-%d %H:%M:%S")
             line = f"{ts} {msg}"
@@ -627,7 +589,6 @@ def init_leo_engine(log_file: Optional[TextIO], window_size: float = TIME_WINDOW
 
 
 def shutdown_leo_engine() -> None:
-    """Stop the background monitoring thread (if running)."""
     global _ENGINE
     with _ENGINE_LOCK:
         if _ENGINE is not None:
