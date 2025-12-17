@@ -41,11 +41,11 @@ def main():
 
             ip = pkt[IP]
 
-            # Rewrite IPs into our lab topology
+            # Rewrites IPs into our lab topology
             ip.src = args.src_ip
             ip.dst = args.dst_ip
 
-            # Force Scapy to recompute length and checksums
+            # Forces Scapy to recompute length and checksums
             if hasattr(ip, "len"):
                 del ip.len
             if hasattr(ip, "chksum"):
@@ -55,7 +55,7 @@ def main():
             if UDP in ip and hasattr(ip[UDP], "chksum"):
                 del ip[UDP].chksum
 
-            # Send IP-layer only; kernel will handle Ethernet/MAC using ARP
+            # Send IP layer only
             send(ip, verbose=False)
 
             count += 1
@@ -66,4 +66,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
